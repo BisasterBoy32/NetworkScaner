@@ -18,8 +18,6 @@ def get_args():
     )
 
     (options ,args) = parser.parse_args()
-    print(args)
-    print(options.interface)
     if not options.interface or not options.network :
         parser.error("Provide the interface and the network type --help for more info")
 
@@ -34,7 +32,7 @@ def scan(network ,interface):
     # to send a packet and receive the response use [scapy.sr(Ether/Ip/Transport Layer)]
     print("[+] Scaning...")
     try :
-        responses , unresponsed = scapy.srp(
+        (responses , unresponsed) = scapy.srp(
             packet_mac/packet_ip,
             iface=interface,
             timeout=1,
@@ -54,7 +52,8 @@ def scan(network ,interface):
     return result_dict
 
 def show_result(result):
-    print('There are ' + str(len(result.keys())) + " devices in this Network") 
+    are_or_is = "are : " if len(result.keys()) > 1 else "is : "
+    print('There '+ are_or_is + str(len(result.keys())) + " devices in this Network") 
     print('********************************************************')
     print('\t\tIP\t\t|\t\tMAC\t\t')
     for ip in result.keys():
